@@ -7,7 +7,5 @@ import java.util.List;
 
 public interface CustomerRepo extends CrudRepository<Customer, Long> {
 
-    List<Customer> findbyName(String name);
-    List<Customer> findAll();
 
 }

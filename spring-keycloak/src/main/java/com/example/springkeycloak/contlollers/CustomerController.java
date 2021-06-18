@@ -1,9 +1,12 @@
 package com.example.springkeycloak.contlollers;
+import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
+import org.springframework.http.ResponseEntity;
 
 import com.example.springkeycloak.models.Customer;
 import com.example.springkeycloak.repositories.CustomerRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 
 import java.util.List;
 @RestController
@@ -15,23 +18,23 @@ public class CustomerController {
 
     @GetMapping("/getall")
     public List<Customer> findAll(){
-       return customerRepo.findAll();
+       return (List<Customer>) customerRepo.findAll();
     }
 
     @PostMapping("/newCustomer")
-    public String saveCustomer(@RequestBody Customer customer){
-        customerRepo.save(customer);
-      return "customer created successfully";
+    public Customer saveCustomer(@RequestBody Customer customer){
+       return customerRepo.save(customer);
     }
 
     @DeleteMapping("/customers/{id}")
-    public String deleteCustomer(@PathVariable ("id") Long id){
-        customerRepo.deleteById(id);
-        return "customer deleted successfully";
+    public ResponseEntity<?> deleteCustomer(@PathVariable (value="id") Long customerID){
+        //Customer customer = customerRepo.findById(customerID).get();
+        customerRepo.deleteById(customerID);
+        return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/customres/{id}")
-    public Customer findByById(Long id){
-        return customerRepo.findById(id).get();
+    @GetMapping("/customers/{id}")
+    public Customer findByById(@PathVariable(value = "id") Long customerID){
+        return customerRepo.findById(customerID).get();
     }
 }
